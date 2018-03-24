@@ -2,35 +2,44 @@ import { Injector, Type } from '@angular/core';
 import { ChainableResolver } from '../chainable-resolver';
 import { UnboundChainableResolverMetadata } from './unbound-chainable-resolver-metadata';
 import { BoundChainableResolver } from '../private/bound-chainable-resolver';
+import { ArgumentsMapper } from '../private/arguments-mapper';
 
 export class BoundChainableResolverMetadata<
   InputsObject,
+  ArgumentsMapperOutputs,
   OutputType,
   ReturnName extends string,
   AllOutputsObject extends InputsObject & { [P in ReturnName]: OutputType }> {
 
-  get parent(): UnboundChainableResolverMetadata<InputsObject, OutputType> {
+  get parent(): UnboundChainableResolverMetadata<InputsObject, ArgumentsMapperOutputs, OutputType> {
     return this.parentMetadata;
   }
 
   constructor(
-    private parentMetadata: UnboundChainableResolverMetadata<InputsObject, OutputType>,
-    private type: Type<ChainableResolver<InputsObject, OutputType>>,
-    private propertyName: ReturnName) {
+    private parentMetadata: UnboundChainableResolverMetadata<InputsObject, ArgumentsMapperOutputs, OutputType>,
+    private type: Type<ChainableResolver<ArgumentsMapperOutputs, OutputType>>,
+    private propertyName: ReturnName,
+    private argumentsMapper: ArgumentsMapper<InputsObject, ArgumentsMapperOutputs>) {
 
   }
 
-  followedBy<NextOutputType>(
-    nextResolver: Type<ChainableResolver<Partial<InputsObject & { [P in ReturnName]: OutputType }>, NextOutputType>>):
-      UnboundChainableResolverMetadata<InputsObject & { [P in ReturnName]: OutputType }, NextOutputType> {
+  followedBy<NextResolverArguments, NextOutputType>(
+    nextResolver: Type<ChainableResolver<NextResolverArguments, NextOutputType>>):
+      UnboundChainableResolverMetadata<InputsObject & { [P in ReturnName]: OutputType }, NextResolverArguments, NextOutputType> {
     return new UnboundChainableResolverMetadata<
       InputsObject & { [P in ReturnName]: OutputType },
+      NextResolverArguments,
       NextOutputType>(
         this, nextResolver);
   }
 
-  generateResolver(injector: Injector): BoundChainableResolver<InputsObject, OutputType, ReturnName, AllOutputsObject> {
-    return new BoundChainableResolver(this.parent.generateResolver(injector), this.propertyName);
+  generateResolver(injector: Injector): BoundChainableResolver<InputsObject, ArgumentsMapperOutputs, OutputType, ReturnName, AllOutputsObject> {
+    const parentUnboundResolver = this.parent.generateResolver(injector);
+    return new BoundChainableResolver(
+      injector.get(this.type),
+      parentUnboundResolver,
+      this.propertyName,
+      this.argumentsMapper);
   }
 
 }

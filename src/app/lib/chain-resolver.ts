@@ -5,7 +5,7 @@ import { BoundChainableResolver } from './private/bound-chainable-resolver';
 export class ChainResolver<OutputsType> implements Resolve<OutputsType> {
 
   constructor(
-    private leafChainableResolver: BoundChainableResolver<any, any, any, OutputsType>) {
+    private leafChainableResolver: BoundChainableResolver<any, any, any, any, OutputsType>) {
 
   }
 

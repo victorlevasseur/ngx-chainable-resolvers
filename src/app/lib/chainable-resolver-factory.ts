@@ -6,7 +6,7 @@ export class ChainableResolverFactory {
 
   static createChain<OutputType>(
     chainableResolver: Type<ChainableResolver<{}, OutputType>>):
-      UnboundChainableResolverMetadata<{}, OutputType> {
+      UnboundChainableResolverMetadata<{}, {}, OutputType> {
     return new UnboundChainableResolverMetadata(null, chainableResolver);
   }
 

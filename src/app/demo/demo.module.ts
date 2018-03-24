@@ -13,11 +13,11 @@ import { NumberOpposerResolver } from './demo-simple-chain/number-opposer-resolv
 export function chainFactory(injector: Injector): ChainResolver<{random: number, repeatedNumber: string, opposed: number}> {
   return ChainableResolverFactory
     .createChain(RandomNumberResolver)
-      .bind('random')
+      .bind({ }, 'random')
     .followedBy(NumberRepeaterResolver)
-      .bind('repeatedNumber')
+      .bind({ number: 'random' }, 'repeatedNumber')
     .followedBy(NumberOpposerResolver)
-      .bind('opposed')
+      .bind({ numberToOppose: 'random' }, 'opposed')
     .generateResolver(injector)
     .build();
 }
