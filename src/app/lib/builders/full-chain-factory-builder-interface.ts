@@ -1,4 +1,4 @@
-import { Injector } from '../../../../.ng_pkg_build/ngx-chainable-resolvers/out/node_modules/@angular/core/src/di/injector';
+import { Injector } from '@angular/core';
 import { FullChainResolver } from '../private/full-chain-resolver';
 
 export interface FullChainFactoryBuilderInterface<OutputsType> {
