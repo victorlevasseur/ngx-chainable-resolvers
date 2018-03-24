@@ -21,10 +21,6 @@ export class ChainBoundResolver<
 
   }
 
-  build(): FullChainResolver<AllOutputsObject> {
-    return new FullChainResolver(this);
-  }
-
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<AllOutputsObject> {

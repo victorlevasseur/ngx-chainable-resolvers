@@ -1,5 +1,5 @@
 import { Injector, Type } from '@angular/core';
-import { ChainBoundResolverBuilderInterface } from './chain-bound-resolver-builder-interface';
+import { ChainBoundResolverBuilderInterface } from '../private/chain-bound-resolver-builder-interface';
 import { ChainBoundResolverInterface } from '../private/chain-bound-resolver-interface';
 import { ChainBoundRoot } from '../private/chain-bound-root';
 import { ArgumentsMapper } from '../private/arguments-mapper';

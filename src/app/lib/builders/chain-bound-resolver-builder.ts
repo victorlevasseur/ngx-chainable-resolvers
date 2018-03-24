@@ -2,14 +2,19 @@ import { Injector, Type } from '@angular/core';
 import { ChainableResolver } from '../chainable-resolver';
 import { ChainBoundResolver } from '../private/chain-bound-resolver';
 import { ArgumentsMapper } from '../private/arguments-mapper';
-import { ChainBoundResolverBuilderInterface } from './chain-bound-resolver-builder-interface';
+import { ChainBoundResolverBuilderInterface } from '../private/chain-bound-resolver-builder-interface';
+import { FullChainFactoryBuilderInterface } from './full-chain-factory-builder-interface';
+import { FullChainResolver } from '../private/full-chain-resolver';
 
 export class ChainBoundResolverBuilder<
   AllInputsObject,
   ResolverArguments,
   ReturnType,
   ReturnName extends string,
-  AllOutputsObject extends AllInputsObject & { [P in ReturnName]: ReturnType }> implements ChainBoundResolverBuilderInterface<AllOutputsObject> {
+  AllOutputsObject extends AllInputsObject & { [P in ReturnName]: ReturnType }>
+  implements
+    ChainBoundResolverBuilderInterface<AllOutputsObject>,
+    FullChainFactoryBuilderInterface<AllOutputsObject> {
 
   get parent(): ChainBoundResolverBuilderInterface<AllInputsObject> {
     return this.parentMetadata;
@@ -21,6 +26,12 @@ export class ChainBoundResolverBuilder<
     private propertyName: ReturnName,
     private argumentsMapper: ArgumentsMapper<AllInputsObject, ResolverArguments>) {
 
+  }
+
+  build(): (injector: Injector) => FullChainResolver<AllOutputsObject> {
+    return (injector => {
+      return new FullChainResolver(this.generateResolver(injector));
+    });
   }
 
   followedBy<NextResolverArguments, NextOutputType, NextReturnName extends string>(
