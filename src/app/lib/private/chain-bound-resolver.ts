@@ -1,25 +1,24 @@
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { map, switchMap } from 'rxjs/operators';
 import { ChainableResolver } from '../chainable-resolver';
-import {UnboundChainableResolver} from './unbound-chainable-resolver';
 import { ChainResolver } from '../chain-resolver';
 import { ArgumentsMapper } from './arguments-mapper';
+import { ChainBoundResolverInterface } from './chain-bound-resolver-interface';
 
-export class BoundChainableResolver<InputsObject, ArgumentsMapperOutputs, OutputType, PropertyName extends string, AllOutputsObject> {
+export class ChainBoundResolver<
+  AllInputsObject,
+  ResolverArguments,
+  ReturnType,
+  ReturnName extends string,
+  AllOutputsObject> implements ChainBoundResolverInterface<AllOutputsObject> {
 
   constructor(
-    private chainableResolver: ChainableResolver<ArgumentsMapperOutputs, OutputType>,
-    private unboundChainableResolver: UnboundChainableResolver<InputsObject, ArgumentsMapperOutputs, OutputType>,
-    private propertyName: PropertyName,
-    private argumentsMapper: ArgumentsMapper<InputsObject, ArgumentsMapperOutputs>) { // TODO Mapper
+    private chainableResolver: ChainableResolver<ResolverArguments, ReturnType>,
+    private parent: ChainBoundResolverInterface<AllInputsObject>,
+    private propertyName: ReturnName,
+    private argumentsMapper: ArgumentsMapper<AllInputsObject, ResolverArguments>) {
 
-  }
-
-  followedBy<NextResolverArguments, NextOutputType>(
-    nextResolver: ChainableResolver<NextResolverArguments, NextOutputType>):
-      UnboundChainableResolver<AllOutputsObject, NextResolverArguments, NextOutputType> {
-    return new UnboundChainableResolver(this, nextResolver);
   }
 
   build(): ChainResolver<AllOutputsObject> {
@@ -29,7 +28,7 @@ export class BoundChainableResolver<InputsObject, ArgumentsMapperOutputs, Output
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<AllOutputsObject> {
-    return this.unboundChainableResolver.resolve(route, state)
+    return this.parent.resolve(route, state)
       .pipe(
         switchMap((inputs) => {
           // Pass the new outputs to the chainable resolver.
@@ -47,8 +46,8 @@ export class BoundChainableResolver<InputsObject, ArgumentsMapperOutputs, Output
       );
   }
 
-  private map(inputs: InputsObject): ArgumentsMapperOutputs {
-    let result: Partial<ArgumentsMapperOutputs> = {};
+  private map(inputs: AllInputsObject): ResolverArguments {
+    let result: Partial<ResolverArguments> = {};
     Object.keys(this.argumentsMapper)
       .forEach((mappedKey) => {
         const inputsKey = this.argumentsMapper[<any>mappedKey];

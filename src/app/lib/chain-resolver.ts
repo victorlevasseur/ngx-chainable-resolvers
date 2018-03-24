@@ -1,11 +1,11 @@
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { BoundChainableResolver } from './private/bound-chainable-resolver';
+import { ChainBoundResolverInterface } from './private/chain-bound-resolver-interface';
 
 export class ChainResolver<OutputsType> implements Resolve<OutputsType> {
 
   constructor(
-    private leafChainableResolver: BoundChainableResolver<any, any, any, any, OutputsType>) {
+    private leafChainableResolver: ChainBoundResolverInterface<OutputsType>) {
 
   }
 
