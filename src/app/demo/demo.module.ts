@@ -4,13 +4,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { DemoSimpleChainComponent } from './demo-simple-chain/demo-simple-chain.component';
 import { RouterModule } from '@angular/router';
 import { DemoMainPageComponent } from './demo-main-page/demo-main-page.component';
-import { ChainResolver } from '../lib/chain-resolver';
+import { FullChainResolver } from '../lib/private/full-chain-resolver';
 import { ChainableResolverFactory } from '../lib/chainable-resolver-factory';
 import { RandomNumberResolver } from './demo-simple-chain/random-number-resolver';
 import { NumberRepeaterResolver } from './demo-simple-chain/number-repeater-resolver';
 import { NumberOpposerResolver } from './demo-simple-chain/number-opposer-resolver';
 
-export function chainFactory(injector: Injector): ChainResolver<{random: number, repeatedNumber: string, opposed: number}> {
+export function chainFactory(injector: Injector): FullChainResolver<{random: number, repeatedNumber: string, opposed: number}> {
   return ChainableResolverFactory
     .createChain()
     .followedBy(RandomNumberResolver, { }, 'random')

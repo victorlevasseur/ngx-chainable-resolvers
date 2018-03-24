@@ -1,4 +1,4 @@
-import { ChainBoundRootBuilder } from './metadata/chain-bound-root-builder';
+import { ChainBoundRootBuilder } from './builders/chain-bound-root-builder';
 
 export class ChainableResolverFactory {
 
