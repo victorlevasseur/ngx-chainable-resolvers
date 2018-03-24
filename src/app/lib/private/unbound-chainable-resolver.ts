@@ -16,10 +16,10 @@ export class UnboundChainableResolver<InputsObject, OutputType> {
   /**
    * Binds a resolver's output to
    */
-  bind<ToPropertyName extends string>(
-    toPropertyName: ToPropertyName):
-      BoundChainableResolver<InputsObject, OutputType, ToPropertyName, InputsObject & { [P in ToPropertyName]: OutputType }> {
-    return new BoundChainableResolver(this, toPropertyName);
+  bind<ToReturnName extends string>(
+    toReturnName: ToReturnName):
+      BoundChainableResolver<InputsObject, OutputType, ToReturnName, InputsObject & { [P in ToReturnName]: OutputType }> {
+    return new BoundChainableResolver(this, toReturnName);
   }
 
   resolve(

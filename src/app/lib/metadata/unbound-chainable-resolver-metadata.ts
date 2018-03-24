@@ -15,15 +15,15 @@ export class UnboundChainableResolverMetadata<InputsObject, OutputType> {
 
   }
 
-  bind<ToPropertyName extends string>(
-    toPropertyName: ToPropertyName):
-      BoundChainableResolverMetadata<InputsObject, OutputType, ToPropertyName, InputsObject & { [P in ToPropertyName]: OutputType }> {
+  bind<ToReturnName extends string>(
+    toReturnName: ToReturnName):
+      BoundChainableResolverMetadata<InputsObject, OutputType, ToReturnName, InputsObject & { [P in ToReturnName]: OutputType }> {
     return new BoundChainableResolverMetadata<
       InputsObject,
       OutputType,
-      ToPropertyName,
-      InputsObject & { [P in ToPropertyName]: OutputType }>(
-        this, this.type, toPropertyName);
+      ToReturnName,
+      InputsObject & { [P in ToReturnName]: OutputType }>(
+        this, this.type, toReturnName);
   }
 
   generateResolver(injector: Injector): UnboundChainableResolver<InputsObject, OutputType> {
