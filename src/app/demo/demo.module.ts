@@ -10,10 +10,6 @@ import { RandomNumberResolver } from './demo-simple-chain/random-number-resolver
 import { NumberRepeaterResolver } from './demo-simple-chain/number-repeater-resolver';
 import { NumberOpposerResolver } from './demo-simple-chain/number-opposer-resolver';
 
-/*export function chainFactory(injector: Injector): FullChainResolver<{random: number, repeatedNumber: string, opposed: number}> {
-  return
-}*/
-
 export const chainInjectionToken = new InjectionToken('chainInjectionToken');
 
 @NgModule({
@@ -40,7 +36,8 @@ export const chainInjectionToken = new InjectionToken('chainInjectionToken');
       useFactory: ChainableResolverFactory
         .createChain()
         .followedBy(RandomNumberResolver, { }, 'random')
-        .followedBy(NumberRepeaterResolver, { number: 'random' }, 'repeatedNumber')
+        .followedBy(RandomNumberResolver, {}, 'random2')
+        .followedBy(NumberRepeaterResolver, { number: 'random', repeat: 'random2' }, 'repeatedNumber')
         .followedBy(NumberOpposerResolver, { numberToOppose: 'random' }, 'opposed')
         .build(),
       deps: [Injector]

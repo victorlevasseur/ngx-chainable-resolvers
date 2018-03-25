@@ -5,8 +5,9 @@ import { delay } from 'rxjs/operators';
 import { ChainableResolver } from '../../lib/chainable-resolver';
 
 export class RandomNumberResolver implements ChainableResolver<{}, number> {
+
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot, inputs: {}): Observable<number> {
-    return Observable.of(Math.round(Math.random() * 100))
+    return Observable.of(Math.round(Math.random() * 9))
       .pipe(
         delay(400)
       );
