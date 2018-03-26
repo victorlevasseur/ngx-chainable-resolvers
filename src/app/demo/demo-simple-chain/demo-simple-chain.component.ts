@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ChainableResolverFactory } from '../../lib/chainable-resolver-factory';
+import { ChainBuilder } from '../../lib/chain-builder';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({

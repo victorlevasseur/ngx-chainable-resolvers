@@ -1,8 +1,8 @@
 import { ChainBoundRootBuilder } from './builders/chain-bound-root-builder';
 
-export class ChainableResolverFactory {
+export class ChainBuilder {
 
-  static createChain(): ChainBoundRootBuilder {
+  static create(): ChainBoundRootBuilder {
     return new ChainBoundRootBuilder();
   }
 

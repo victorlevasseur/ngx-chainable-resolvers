@@ -5,7 +5,7 @@ import { DemoSimpleChainComponent } from './demo-simple-chain/demo-simple-chain.
 import { RouterModule } from '@angular/router';
 import { DemoMainPageComponent } from './demo-main-page/demo-main-page.component';
 import { FullChainResolver } from '../lib/private/full-chain-resolver';
-import { ChainableResolverFactory } from '../lib/chainable-resolver-factory';
+import { ChainBuilder } from '../lib/chain-builder';
 import { RandomNumberResolver } from './demo-simple-chain/random-number-resolver';
 import { NumberRepeaterResolver } from './demo-simple-chain/number-repeater-resolver';
 import { NumberOpposerResolver } from './demo-simple-chain/number-opposer-resolver';
@@ -33,8 +33,8 @@ export const chainInjectionToken = new InjectionToken('chainInjectionToken');
     NumberOpposerResolver,
     {
       provide: chainInjectionToken,
-      useFactory: ChainableResolverFactory
-        .createChain()
+      useFactory: ChainBuilder
+        .create()
         .followedBy(RandomNumberResolver, { }, 'random')
         .followedBy(RandomNumberResolver, {}, 'random2')
         .followedBy(NumberRepeaterResolver, { number: 'random', repeat: 'random2' }, 'repeatedNumber')

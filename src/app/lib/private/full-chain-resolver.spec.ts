@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { Injector, Type } from '@angular/core';
 import { StaticInjector } from '@angular/core/src/di/injector';
-import { ChainableResolverFactory } from '../chainable-resolver-factory';
+import { ChainBuilder } from '../chain-builder';
 
 class NumberGeneratorResolver implements ChainableResolver<{}, number> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot, inputs: {}): Observable<number> {
@@ -34,7 +34,7 @@ describe('FullChainResolver', () => {
 
   it('should resolve a chain with a two simple resolvers', () => {
     const injector = generateInjector(NumberGeneratorResolver, DoubleNumberResolver);
-    const chainResolver = ChainableResolverFactory.createChain()
+    const chainResolver = ChainBuilder.create()
       .followedBy(NumberGeneratorResolver, { }, 'amount')
       .followedBy(DoubleNumberResolver, { value: 'amount' }, 'doubledAmount')
       .build()(injector);

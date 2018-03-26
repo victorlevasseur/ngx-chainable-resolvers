@@ -70,8 +70,8 @@ export const chainInjectionToken = new InjectionToken('chainInjectionToken');
 
 {
   provide: chainInjectionToken,
-  useFactory: ChainableResolverFactory
-    .createChain()
+  useFactory: ChainBuilder
+    .create()
     .followedBy(RandomNumberResolver, { }, 'random')
     .followedBy(RandomNumberResolver, { }, 'random2')
     .followedBy(NumberRepeaterResolver, { number: 'random', repeat: 'random2' }, 'repeatedNumber')
@@ -90,7 +90,7 @@ resolve method). The type of this inputs object is declared in the first generic
 ```ChainableResolver```. The second generic parameter of ```ChainableResolver``` is
 the resolver return type (like the first generic parameter of the Angular ```Resolve```).
 
-To create a chain of resolvers, use the ```ChainableResolverFactory.createChain()``` static method
+To create a chain of resolvers, use the ```ChainBuilder.create()``` static method
 and then declare each resolvers with their inputs object mapper and their return value mapper with
 the ```followedBy``` method.
 
