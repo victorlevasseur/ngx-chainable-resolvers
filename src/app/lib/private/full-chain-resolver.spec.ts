@@ -39,13 +39,13 @@ describe('FullChainResolver', () => {
       .followedBy(DoubleNumberResolver, { value: 'amount' }, 'doubledAmount')
       .build()(injector);
 
-    let result;
+    let result: any;
     chainResolver.resolve(<any>{}, <any>{})
       .subscribe((r) => {
         result = r;
       });
 
-    expect(result).toEqual(<any>{
+    expect(result).toEqual({
       amount: 37,
       doubledAmount: 74
     });
